@@ -22,7 +22,7 @@ jobs:
           node-version: '20'
 
       - name: Install Wasp
-        run: npm install -g wasp-lang/waspc
+        run: npm install -g @wasp.sh/wasp-cli
 
       - name: Check directory structure
         run: |
