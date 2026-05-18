@@ -24,29 +24,10 @@ jobs:
       - name: Install Wasp
         run: npm install -g @wasp.sh/wasp-cli
 
-      - name: Debug wasp and project
-        run: |
-          echo "=== wasp version ==="
-          wasp version || echo "WASP_VERSION_FAILED"
-          echo "=== which wasp ==="
-          which wasp || echo "WASP_NOT_IN_PATH"
-          echo "=== node version ==="
-          node --version
-          echo "=== npm version ==="
-          npm --version
-          echo "=== wasp location ==="
-          npm list -g @wasp.sh/wasp-cli --depth=0 2>/dev/null || echo "NPM_LIST_FAILED"
-          echo "=== project files ==="
-          ls -la
-          echo "=== main.wasp exists? ==="
-          test -f main.wasp && echo "EXISTS" || echo "NOT FOUND"
-          echo "=== .wasproot exists? ==="
-          test -f .wasproot && echo "EXISTS" || echo "NOT FOUND"
-          echo "=== wasp lang build ==="
-          wasp lang build 2>&1 || echo "WASP_LANG_BUILD_FAILED: $?"
-
       - name: Generate Wasp project
-        run: wasp lang build
+        run: |
+          wasp version
+          wasp lang build
 
       - name: Install dependencies
         run: npm install
