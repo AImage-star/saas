@@ -23,7 +23,8 @@ jobs:
 
       - name: Install Wasp binary
         run: |
-          curl -fsSL https://github.com/wasp-lang/wasp/releases/download/v0.23.0/wasp-linux-x86_64.tar.gz | tar xz
+          curl -Lkf https://github.com/wasp-lang/wasp/releases/download/v0.23.0/wasp-linux-x86_64.tar.gz -o wasp.tar.gz
+          tar -xzf wasp.tar.gz
           sudo mv wasp /usr/local/bin/
           wasp version
 
