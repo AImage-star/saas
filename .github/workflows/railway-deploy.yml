@@ -22,22 +22,23 @@ jobs:
           node-version: '24'
 
       - name: Install Wasp
-        run: |
-          npm install -g @wasp.sh/wasp-cli
-          wasp version || echo "WASP_VERSION_FAILED"
-          node --version
-          npm --version
+        run: npm install -g @wasp.sh/wasp-cli
 
       - name: Generate Wasp project
-        run: wasp lang build 2>&1 | tee wasp_build.log || cat wasp_build.log
+        run: wasp lang build
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build
-        run: wasp deploy railway
+      - name: Install Railway CLI
+        run: |
+          curl -fsSL https://railway.app/downloads/linux/latest | tar xz
+          sudo mv railway /usr/local/bin/
+
+      - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-
-      - name: Get Railway URL
-        run: railway url 2>&1 || echo "Done"
+        run: |
+          railway login --token="$RAILWAY_TOKEN"
+          railway up --no-input
+          railway url
