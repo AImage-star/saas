@@ -28,11 +28,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd template/app && npm ci
+          pwd && ls -la template/app/package.json 2>/dev/null && cat template/app/package.json | head -5 || echo 'NOT FOUND'
+          cd template/app && npm install
 
       - name: Build SaaS app
-        run: |
-          cd template/app && npm run build
+        run: cd template/app && npm run build
 
       - name: Deploy to Railway
         env:
