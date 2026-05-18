@@ -21,10 +21,16 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Generate Wasp project
-        run: npx -y wasp-lang/waspc lang build
+      - name: Install Wasp binary
+        run: |
+          curl -fsSL https://github.com/wasp-lang/wasp/releases/download/v0.23.0/wasp-linux-x86_64.tar.gz | tar xz
+          sudo mv wasp /usr/local/bin/
+          wasp version
 
-      - name: Install dependencies (with workspaces)
+      - name: Generate Wasp project
+        run: wasp lang build
+
+      - name: Install dependencies
         run: npm install
 
       - name: Build
