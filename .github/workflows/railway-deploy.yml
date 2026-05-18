@@ -9,6 +9,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout code
@@ -19,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
 
       - name: Install Wasp
         run: npm install -g @wasp.sh/wasp-cli
@@ -31,17 +33,10 @@ jobs:
         run: npm install
 
       - name: Build
-        run: wasp deploy
-
-      - name: Install Railway CLI
-        run: |
-          curl -fsSL https://railway.app/downloads/linux/latest | tar xz
-          sudo mv railway /usr/local/bin/
-
-      - name: Deploy to Railway
+        run: wasp deploy railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          railway login --token="$RAILWAY_TOKEN"
-          railway up --no-input
-          railway url
+          NODE_VERSION: '24'
+
+      - name: Get Railway URL
+        run: railway url 2>&1 || echo "Deployment complete"
