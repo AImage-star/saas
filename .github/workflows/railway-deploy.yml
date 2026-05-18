@@ -9,8 +9,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout code
@@ -26,8 +24,13 @@ jobs:
       - name: Install Wasp
         run: npm install -g @wasp.sh/wasp-cli
 
+      - name: Verify wasp
+        run: |
+          echo "Node: $(node --version)"
+          echo "Wasp: $(wasp version)"
+
       - name: Generate Wasp project
-        run: wasp lang build
+        run: wasp lang build 2>&1
 
       - name: Install dependencies
         run: npm install
@@ -36,7 +39,6 @@ jobs:
         run: wasp deploy railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          NODE_VERSION: '24'
 
       - name: Get Railway URL
-        run: railway url 2>&1 || echo "Deployment complete"
+        run: railway url 2>&1 || echo "Done"
