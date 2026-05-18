@@ -23,12 +23,26 @@ jobs:
 
       - name: Install Wasp binary
         run: |
-          curl -fL --connect-timeout 30 --max-time 180 -o wasp.tar.gz             https://github.com/wasp-lang/wasp/releases/download/v0.23.0/wasp-linux-x86_64.tar.gz
-          tar -xzf wasp.tar.gz
-          rm wasp.tar.gz
+          set -x
+          echo "Downloading wasp..."
+          ls -la
+          curl -fL --connect-timeout 30 --max-time 300 -o wasp.tar.gz             https://github.com/wasp-lang/wasp/releases/download/v0.23.0/wasp-linux-x86_64.tar.gz             2>&1 | tee curl_output.txt
+          echo "curl exit: $?"
+          echo "File size:"
+          ls -lh wasp.tar.gz 2>&1 || echo "File not found"
+          echo "File type:"
+          file wasp.tar.gz 2>&1 || echo "file command not found"
+          echo "Tarball contents:"
+          tar -tzf wasp.tar.gz 2>&1 | head -10 || echo "tar failed"
+          echo "Extracting..."
+          tar -xzf wasp.tar.gz 2>&1
+          echo "tar exit: $?"
+          echo "Files after extraction:"
+          ls -la
+          ls -la wasp 2>/dev/null && file wasp || echo "wasp not found"
           chmod +x wasp
           sudo mv wasp /usr/local/bin/
-          wasp version
+          wasp version 2>&1 || echo "wasp version failed"
 
       - name: Generate Wasp project
         run: wasp lang build
