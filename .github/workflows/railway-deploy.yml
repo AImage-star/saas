@@ -27,7 +27,7 @@ jobs:
           cache: 'npm'
 
       - name: Install Wasp
-        run: npm install -g wasp-lang/waspc#v0.13.0
+        run: npm install -g wasp-lang/waspc
 
       - name: Install dependencies
         working-directory: ./template/app
