@@ -20,19 +20,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: template/app/package-lock.json
 
       - name: Install Wasp
         run: npm install -g wasp-lang/waspc
 
-      - name: Install dependencies
+      - name: Check directory structure
         run: |
+          echo "=== Working directory ==="
           pwd
-          ls -la
-          find . -name 'package.json' -not -path './node_modules/*' 2>/dev/null | head -10
-          cat template/app/package.json 2>/dev/null | head -3 || echo 'FILE NOT FOUND'
-          cd template/app && npm install
+          echo "=== All files ==="
+          find . -maxdepth 3 -type f -name '*.json' | grep -v node_modules | head -20
+          echo "=== template/app exists? ==="
+          ls -la template/app/ 2>/dev/null || echo "NOT FOUND"
+          echo "=== template/app/package.json first lines ==="
+          head -5 template/app/package.json 2>/dev/null || echo "FILE NOT FOUND"
+
+      - name: Install dependencies
+        run: cd template/app && npm install
 
       - name: Build SaaS app
         run: cd template/app && npm run build
@@ -41,17 +45,10 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          # Install Railway CLI
           curl -fsSL https://railway.app/downloads/linux/latest | tar xz
           sudo mv railway /usr/local/bin/
-          
-          # Login to Railway
           railway login --token="$RAILWAY_TOKEN"
-          
-          # Link to project (create if not exists)
           railway init --no-input
-          
-          # Deploy
           railway up --no-input
 
       - name: Get Railway URL
