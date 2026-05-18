@@ -28,7 +28,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pwd && ls -la template/app/package.json 2>/dev/null && cat template/app/package.json | head -5 || echo 'NOT FOUND'
+          pwd
+          ls -la
+          find . -name 'package.json' -not -path './node_modules/*' 2>/dev/null | head -10
+          cat template/app/package.json 2>/dev/null | head -3 || echo 'FILE NOT FOUND'
           cd template/app && npm install
 
       - name: Build SaaS app
