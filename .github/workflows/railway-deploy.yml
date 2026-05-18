@@ -23,8 +23,10 @@ jobs:
 
       - name: Install Wasp binary
         run: |
-          wget -q --timeout=60 --tries=3 -O wasp.tar.gz https://github.com/wasp-lang/wasp/releases/download/v0.23.0/wasp-linux-x86_64.tar.gz
+          curl -fL --connect-timeout 30 --max-time 180 -o wasp.tar.gz             https://github.com/wasp-lang/wasp/releases/download/v0.23.0/wasp-linux-x86_64.tar.gz
           tar -xzf wasp.tar.gz
+          rm wasp.tar.gz
+          chmod +x wasp
           sudo mv wasp /usr/local/bin/
           wasp version
 
