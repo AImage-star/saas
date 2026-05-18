@@ -21,10 +21,16 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Install Wasp CLI
+        run: npm install -g @wasp.sh/wasp-cli
+
+      - name: Generate Wasp project
+        run: wasp lang build
+
+      - name: Install dependencies (with workspaces)
         run: npm install
 
-      - name: Build SaaS app
+      - name: Build
         run: npm run build
 
       - name: Install Railway CLI
