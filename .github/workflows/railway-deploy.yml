@@ -21,25 +21,21 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Wasp
-        run: npm install -g @wasp.sh/wasp-cli
-
       - name: Install dependencies
         run: npm install
 
       - name: Build SaaS app
         run: npm run build
 
+      - name: Install Railway CLI
+        run: |
+          curl -fsSL https://railway.app/downloads/linux/latest | tar xz
+          sudo mv railway /usr/local/bin/
+
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          curl -fsSL https://railway.app/downloads/linux/latest | tar xz
-          sudo mv railway /usr/local/bin/
           railway login --token="$RAILWAY_TOKEN"
-          railway init --no-input
           railway up --no-input
-
-      - name: Get Railway URL
-        run: |
-          railway url 2>&1 || echo "Deployment complete - check Railway dashboard"
+          railway url
