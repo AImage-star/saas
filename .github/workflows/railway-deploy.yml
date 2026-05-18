@@ -21,28 +21,28 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Wasp binary
+      - name: Test connectivity
         run: |
-          set -x
-          echo "Downloading wasp..."
-          ls -la
-          curl -fL --connect-timeout 30 --max-time 300 -o wasp.tar.gz             https://github.com/wasp-lang/wasp/releases/download/v0.23.0/wasp-linux-x86_64.tar.gz             2>&1 | tee curl_output.txt
-          echo "curl exit: $?"
-          echo "File size:"
-          ls -lh wasp.tar.gz 2>&1 || echo "File not found"
-          echo "File type:"
-          file wasp.tar.gz 2>&1 || echo "file command not found"
-          echo "Tarball contents:"
-          tar -tzf wasp.tar.gz 2>&1 | head -10 || echo "tar failed"
-          echo "Extracting..."
-          tar -xzf wasp.tar.gz 2>&1
-          echo "tar exit: $?"
-          echo "Files after extraction:"
-          ls -la
-          ls -la wasp 2>/dev/null && file wasp || echo "wasp not found"
-          chmod +x wasp
-          sudo mv wasp /usr/local/bin/
-          wasp version 2>&1 || echo "wasp version failed"
+          echo "=== Testing connectivity ==="
+          curl -I https://github.com 2>&1 | head -3
+          echo "---"
+          curl -I https://objects.githubusercontent.com 2>&1 | head -3
+          echo "---"
+          curl -I https://github.com/wasp-lang/wasp/releases/download/v0.23.0/wasp-linux-x86_64.tar.gz 2>&1 | head -5
+
+      - name: Download Wasp binary
+        run: |
+          echo "=== Downloading wasp ==="
+          mkdir -p /tmp/wasp-test
+          curl -fL --connect-timeout 30 --max-time 300             -o /tmp/wasp-test/wasp.tar.gz             https://github.com/wasp-lang/wasp/releases/download/v0.23.0/wasp-linux-x86_64.tar.gz
+          echo "Downloaded, size: $(ls -lh /tmp/wasp-test/wasp.tar.gz | awk '{print $5}')"
+          echo "Content type: $(file /tmp/wasp-test/wasp.tar.gz)"
+          tar -tzf /tmp/wasp-test/wasp.tar.gz | head -5
+          tar -xzf /tmp/wasp-test/wasp.tar.gz -C /tmp/wasp-test/
+          ls -la /tmp/wasp-test/
+          chmod +x /tmp/wasp-test/wasp
+          sudo mv /tmp/wasp-test/wasp /usr/local/bin/
+          wasp version
 
       - name: Generate Wasp project
         run: wasp lang build
