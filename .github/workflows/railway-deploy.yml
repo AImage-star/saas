@@ -22,7 +22,10 @@ jobs:
           node-version: '24'
 
       - name: Install Wasp
-        run: npm install -g @wasp.sh/wasp-cli
+        run: |
+          npm install -g @wasp.sh/wasp-cli
+          wasp version
+          node --version
 
       - name: Generate Wasp project
         run: wasp lang build
