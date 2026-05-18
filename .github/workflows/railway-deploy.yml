@@ -24,22 +24,11 @@ jobs:
       - name: Install Wasp
         run: npm install -g @wasp.sh/wasp-cli
 
-      - name: Check directory structure
-        run: |
-          echo "=== Working directory ==="
-          pwd
-          echo "=== All files ==="
-          find . -maxdepth 3 -type f -name '*.json' | grep -v node_modules | head -20
-          echo "=== template/app exists? ==="
-          ls -la template/app/ 2>/dev/null || echo "NOT FOUND"
-          echo "=== template/app/package.json first lines ==="
-          head -5 template/app/package.json 2>/dev/null || echo "FILE NOT FOUND"
-
       - name: Install dependencies
-        run: cd template/app && npm install
+        run: npm ci
 
       - name: Build SaaS app
-        run: cd template/app && npm run build
+        run: npm run build
 
       - name: Deploy to Railway
         env:
