@@ -24,21 +24,16 @@ jobs:
       - name: Install Wasp
         run: npm install -g @wasp.sh/wasp-cli
 
-      - name: Generate Wasp project
-        run: wasp lang build
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install Railway CLI
-        run: |
-          curl -fsSL https://railway.app/downloads/linux/latest | tar xz
-          sudo mv railway /usr/local/bin/
-
       - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway login --token "$RAILWAY_TOKEN"
-          railway up --no-input
-          railway url
+          set -x
+          wasp version || echo "WASP_VERSION_FAILED"
+          wasp deploy railway 2>&1 | tee deploy.log
+          echo "Deploy exit: $?"
+          cat deploy.log || true
+
+      - name: Show Railway URL
+        run: |
+          railway url 2>&1 || echo "No URL (deployment may have failed)"
