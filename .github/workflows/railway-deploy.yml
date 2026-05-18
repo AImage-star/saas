@@ -24,13 +24,8 @@ jobs:
       - name: Install Wasp
         run: npm install -g @wasp.sh/wasp-cli
 
-      - name: Verify wasp
-        run: |
-          echo "Node: $(node --version)"
-          echo "Wasp: $(wasp version)"
-
       - name: Generate Wasp project
-        run: wasp lang build 2>&1
+        run: wasp lang build
 
       - name: Install dependencies
         run: npm install
