@@ -22,10 +22,30 @@ jobs:
           node-version: '22'
 
       - name: Install Wasp
-        run: npm install -g @wasp.sh/wasp-cli
+        run: |
+          npm install -g @wasp.sh/wasp-cli
+          wasp version
+
+      - name: Debug wasp environment
+        run: |
+          echo "Node version: $(node --version)"
+          echo "NPM version: $(npm --version)"
+          echo "Wasp version: $(wasp version)"
+          echo "---"
+          echo "Checking main.wasp:"
+          head -5 main.wasp 2>/dev/null || echo "main.wasp not found"
+          echo "---"
+          echo "Checking .wasproot:"
+          cat .wasproot 2>/dev/null || echo ".wasproot not found"
+          echo "---"
+          echo "Files at root:"
+          ls -la
 
       - name: Generate Wasp project
-        run: wasp lang build
+        run: |
+          set -x
+          wasp lang build 2>&1 | tee wasp_build.log
+          echo "wasp lang build exit: $?"
 
       - name: Install dependencies
         run: npm install
