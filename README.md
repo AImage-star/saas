@@ -1,1 +1,18 @@
-IyA8WU9VUl9BUFBfTkFNRT4NCg0KQnVpbHQgd2l0aCBbV2FzcF0oaHR0cHM6Ly93YXNwLnNoKSwgYmFzZWQgb24gdGhlIFtPcGVuIFNhYXNdKGh0dHBzOi8vb3BlbnNhYXMuc2gpIHRlbXBsYXRlLg0KDQojIyBEZXZlbG9wbWVudA0KDQojIyMgUnVubmluZyBsb2NhbGx5DQoNCi0gTWFrZSBzdXJlIHlvdSBoYXZlIHRoZSBgLmVudi5jbGllbnRgIGFuZCBgLmVudi5zZXJ2ZXJgIGZpbGVzIHdpdGggY29ycmVjdCBkZXYgdmFsdWVzIGluIHRoZSByb290IG9mIHRoZSBwcm9qZWN0Lg0KLSBSdW4gdGhlIGRhdGFiYXNlIHdpdGggYHdhc3Agc3RhcnQgZGJgIGFuZCBsZWF2ZSBpdCBydW5uaW5nLg0KLSBSdW4gYHdhc3Agc3RhcnRgIGFuZCBsZWF2ZSBpdCBydW5uaW5nLg0KLSBbT1BUSU9OQUxdOiBJZiB0aGlzIGlzIHRoZSBmaXJzdCB0aW1lIHN0YXJ0aW5nIHRoZSBhcHAsIG9yIHlvdSd2ZSBqdXN0IG1hZGUgY2hhbmdlcyB0byB5b3VyIGVudGl0aWVzL3ByaXNtYSBzY2hlbWEsIGFsc28gcnVuIGB3YXNwIGRiIG1pZ3JhdGUtZGV2YC4NCg==
+# AImage SaaS
+
+Built with [Wasp](https://wasp.sh), based on the [Open SaaS](https://opensaas.sh) template.
+
+## 🚀 Deploy to Railway
+
+This project automatically deploys to Railway on every push to the main branch via GitHub Actions.
+
+## Development
+
+### Running locally
+
+- Make sure you have the .env.client and .env.server files with correct dev values in the root of the project.
+- Run the database with wasp start db and leave it running.
+- Run wasp start and leave it running.
+- [OPTIONAL]: If this is the first time starting the app, or you've just made changes to your entities/prisma schema, also run wasp db migrate-dev.
+
+See the [Open SaaS docs](https://docs.opensaas.sh) for more details.
